@@ -34,6 +34,7 @@ const routes: RouteRecordRaw[] = [
         path: '/sys/users',
         meta: {
           title: '用户管理',
+          icon:'users',
         },
         component: () => import('views/sys/users/index.vue'),
       },
@@ -41,6 +42,7 @@ const routes: RouteRecordRaw[] = [
         path: '/sys/roles',
         meta: {
           title: '角色管理',
+          icon:'roles',
         },
         component: () => import('views/sys/roles/index.vue'),
       },
@@ -48,6 +50,7 @@ const routes: RouteRecordRaw[] = [
         path: '/sys/menus',
         meta: {
           title: '菜单管理',
+          icon:'menus'
         },
         component: () => import('views/sys/menus/index.vue'),
       },

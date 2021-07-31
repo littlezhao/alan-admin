@@ -10,6 +10,7 @@
     >
       <n-menu
         :collapsed-icon-size="22"
+        :indent="18"
         :collapsed-width="64"
         :options="menuOptions"
         collapse-mode="width"
@@ -18,7 +19,9 @@
     </n-layout-sider>
     <n-layout>
       <n-layout-header bordered>颐和园路</n-layout-header>
-      <n-layout-content><router-view></router-view></n-layout-content>
+      <n-layout-content class="w-full h-full p-4"
+        ><router-view></router-view
+      ></n-layout-content>
       <n-layout-footer position="absolute" bordered>成府路</n-layout-footer>
     </n-layout>
   </n-layout>
