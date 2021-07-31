@@ -25,11 +25,12 @@
 </template>
 <script lang="ts" setup>
 import RouterLink from 'comps/RouterLink.vue'
+import { NIcon } from 'naive-ui'
 import { ref, h } from 'vue'
 import { useRouter } from 'vue-router'
 import { parseMenu } from '../utils/menuUtils'
 const router = useRouter()
-console.log(router)
+console.log(router.options.routes)
 const menuOptions = parseMenu(router.options.routes)
 console.log(menuOptions)
 const renderMenuLabel = (option: any) => {
@@ -37,5 +38,11 @@ const renderMenuLabel = (option: any) => {
     return h(RouterLink, { to: option.key, title: option.label })
   }
   return option.label
+}
+const rederMenuIcon = (option: any) => {
+  console.log(option.meta?.icon)
+  if (option.meta?.icon) {
+    return h(NIcon, null, { default: () => h(option.meta.icon) })
+  }
 }
 </script>

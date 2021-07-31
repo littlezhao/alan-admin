@@ -1,16 +1,18 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { svgBuilder } from './src/plugins/SvgBuilder/index'
 import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  base: './',
+  plugins: [vue(), svgBuilder('./src/assets/svg/')],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
       apis: path.resolve(__dirname, 'src/apis'),
       views: path.resolve(__dirname, 'src/views'),
       comps: path.resolve(__dirname, 'src/components'),
-      interfaces: path.resolve(__dirname, 'src/interfaces')
-    }
-  }
+      interfaces: path.resolve(__dirname, 'src/interfaces'),
+    },
+  },
 })

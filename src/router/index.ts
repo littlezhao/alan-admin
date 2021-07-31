@@ -1,3 +1,5 @@
+import NProgress from 'nprogress' // progress bar
+import 'nprogress/nprogress.css'
 import {
   createRouter,
   createWebHashHistory,
@@ -15,7 +17,8 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/index',
     meta: {
-      title: '首页',
+      title: '控制台',
+      icon:'dashbord'
     },
     component: () => import('../layout/index.vue'),
   },
@@ -24,6 +27,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('../layout/index.vue'),
     meta: {
       title: '系统管理',
+      icon:'system'
     },
     children: [
       {
@@ -53,5 +57,14 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   routes,
   history: createWebHashHistory(),
+})
+
+NProgress.configure({ showSpinner: true })
+router.beforeEach((to, from, next) => {
+  NProgress.start()
+  next()
+})
+router.afterEach(() => {
+  NProgress.done()
 })
 export default router

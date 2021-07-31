@@ -21,9 +21,12 @@ export default defineComponent({
         siderColor: '#191a23',
       },
       Menu: {
+        itemIconColor: '#fff',
         itemTextColor: '#fff',
-        itemTextColorHover: '#fff',
+        itemTextColorHover: '#409EFF',
+        itemIconColorHover: '#409EFF',
         itemTextColorActive: '#409EFF',
+        itemIconColorActive: '#409EFF',
       },
       Input: {},
     }
