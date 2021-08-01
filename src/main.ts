@@ -4,4 +4,10 @@ import './styles/index.css'
 import naive from 'naive-ui'
 import router from './router/index'
 import GlobalCompnents from './components/index'
-createApp(App).use(router).use(GlobalCompnents).use(naive).mount('#app')
+import store from './store/index'
+createApp(App)
+  .use(router)
+  .use(store)
+  .use(GlobalCompnents)
+  .use(naive)
+  .mount('#app')
