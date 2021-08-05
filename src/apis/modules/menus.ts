@@ -5,3 +5,7 @@ export const getMenus = async <T>() => {
   const { data } = await get<T>('/menus')
   return data
 }
+export const getMenusAndButtonsTree = async <T>() => {
+  const { data } = await get<T>('/menus')
+  return data
+}

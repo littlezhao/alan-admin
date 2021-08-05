@@ -1,4 +1,4 @@
-export interface Menu {
+ interface MenuModel {
   menuId: number
   parentId?: any
   type: number
@@ -15,5 +15,9 @@ export interface Menu {
   createTime: string
   updateBy: string
   updateTime: string
-  children: Menu[]
+  children?: MenuModel[]
+ }
+
+export {
+  MenuModel
 }

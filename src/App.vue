@@ -19,6 +19,7 @@ export default defineComponent({
       },
       Layout: {
         siderColor: '#191a23',
+        color: '#f5f7f9',
       },
       Menu: {
         itemIconColor: '#fff',
