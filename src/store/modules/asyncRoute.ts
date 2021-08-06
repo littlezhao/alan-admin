@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import router from '@/router'
-import { RouteRecordRaw, useRouter } from 'vue-router'
+import { RouteRecordName, RouteRecordRaw, useRouter } from 'vue-router'
 import { getMenus } from '@/apis/modules/menus'
 import { parseMenuToRouters } from '@/utils/menuUtils'
-import { Menu } from '@/interfaces'
+import { MenuModel } from '@/interfaces'
 import store from '..'
 
 export interface IMenuState {
@@ -32,12 +32,15 @@ const useAsyncRouteStore = defineStore({
       this.menus = menus
     },
     async generateAsyncRoutes() {
-      const menus = await getMenus<Array<Menu>>()
+      const menus = await getMenus<Array<MenuModel>>()
       const accessMenus = parseMenuToRouters(menus)
       this.setMenus(accessMenus)
+      console.log(router)
       accessMenus.forEach((menu) => {
-        router.addRoute(menu)
-        router.options.routes.push(menu)
+        if (!router.hasRoute(menu.name as RouteRecordName)) {
+          router.addRoute(menu)
+          router.options.routes.push(menu)
+        }
       })
       this.setDynamicAddedRoute(true)
     },

@@ -2,6 +2,7 @@ import { RouteRecordRaw } from 'vue-router'
 
 const loginRoute: RouteRecordRaw = {
   path: '/login',
+  name:'Login',
   meta: {
     hidden: true,
   },
@@ -9,6 +10,7 @@ const loginRoute: RouteRecordRaw = {
 }
 const indexRoute: RouteRecordRaw = {
   path: '/',
+  name:'Root',
   meta: {
     hidden: true,
   },
@@ -16,6 +18,7 @@ const indexRoute: RouteRecordRaw = {
 }
 const rootRoute: RouteRecordRaw = {
   path: '/index',
+  name:'Index',
   meta: {
     title: '控制台',
     icon: 'dashbord',

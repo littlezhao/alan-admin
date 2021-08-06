@@ -62,7 +62,7 @@ import { constantRoutes } from './router'
 // ]
 const router = createRouter({
   routes: [...constantRoutes],
-  history: createWebHashHistory(),
+  history: createWebHistory(),
 })
 
 NProgress.configure({ showSpinner: true })
@@ -73,8 +73,9 @@ router.beforeEach(async (to, from, next) => {
     next()
     return
   }
+
   await asyncRoutestore.generateAsyncRoutes()
-  next(to.path)
+  next({...to,replace:true})
 })
 router.afterEach(() => {
   NProgress.done()

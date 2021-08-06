@@ -1,5 +1,4 @@
 <template>
-  <IconButton buttonColor="#1890ff" iconName="add" :buttonText="addMenuText" />
   <!-- <n-modal
     v-model:show="showAddModal"
     preset="dialog"
@@ -35,8 +34,13 @@
                 </template>
               </n-button>
             </n-dropdown>
-            <n-button type="info" ghost icon-placement="left">
-              全部展开
+            <n-button
+              type="info"
+              ghost
+              icon-placement="left"
+              @click="expandCollapseHandle"
+            >
+              全部{{ state.expandedKeys.length ? '收起' : '展开' }}
               <template #icon>
                 <div class="flex items-center">
                   <n-icon size="14">
@@ -75,6 +79,7 @@
                 :pattern="state.treeSearchPattern"
                 :data="state.treeData"
                 @update:expanded-keys="onExpandedKeys"
+                @update:selected-keys="selectedTree"
                 style="max-height: 650px; overflow: hidden"
               />
             </template>
@@ -82,7 +87,58 @@
         </div>
       </n-card>
     </n-gi>
-    <n-gi span="2"> 123 </n-gi>
+    <n-gi span="2">
+      <n-card :segmented="{ content: 'hard' }" :bordered="false" size="small">
+        <template #header>
+          <n-space>
+            <n-icon size="18">
+              <FormOutlined />
+            </n-icon>
+            <span
+              >编辑菜单{{
+                state.treeItemTitle ? `：${state.treeItemTitle}` : ''
+              }}</span
+            >
+          </n-space>
+        </template>
+        <n-alert type="info" closable v-show="!state.isEditMenu"> 从菜单列表选择一项后，进行编辑</n-alert>
+        <n-form
+          :model="state.menuForm"
+          ref="formRef"
+          label-placement="left"
+          :label-width="100"
+          v-if="state.isEditMenu"
+          class="py-4"
+        >
+          <n-form-item label="名称" path="label">
+            <n-input
+              placeholder="请输入名称"
+              v-model:value="state.menuForm.label"
+            />
+          </n-form-item>
+          <n-form-item label="路径" path="path">
+            <n-input
+              placeholder="请输入路径"
+              v-model:value="state.menuForm.path"
+            />
+          </n-form-item>
+          <n-form-item label="权限标志" path="auth">
+            <n-input
+              placeholder="请输入权限"
+              v-model:value="state.menuForm.auth"
+            />
+          </n-form-item>
+          <n-form-item path="auth" style="margin-left: 100px">
+            <n-space>
+              <n-button type="primary" :loading="state.subLoding" @click="formSubmit"
+                >保存修改</n-button
+              >
+              <n-button @click="handleReset">重置</n-button>
+            </n-space>
+          </n-form-item>
+        </n-form>
+      </n-card>
+    </n-gi>
   </n-grid>
 </template>
 
@@ -96,10 +152,12 @@ onMounted(async () => {
   state.treeData = parse2Tree(treeList)
   state.loading = false
 })
-const onExpandedKeys = (keys: string[]) => {
+const onExpandedKeys = (keys: number[]) => {
   state.expandedKeys = keys
 }
-const selectedTree = (keys: string[]) => {}
+const selectedTree = (keys: string[]) => {
+  state.isEditMenu=true
+}
 const parse2Tree = (menus: MenuModel[]): any => {
   return menus.map((menu) => {
     if (menu.children && menu.children.length > 0) {
@@ -110,15 +168,51 @@ const parse2Tree = (menus: MenuModel[]): any => {
     return { ...menu, label: menu.title, key: menu.menuId }
   })
 }
-const addMenuText = ref('新增菜单')
+const expandCollapseHandle = () => {
+  state.expandedKeys = state.expandedKeys.length
+    ? []
+    : state.treeData.map((item: any) => item.key)
+  console.log(state.expandedKeys)
+}
 const isCanAddSubMenu = ref(false)
-
-const state = reactive({
+interface menuTreeState {
+  treeSearchPattern: String
+  treeItemTitle: String
+  loading: Boolean
+  expandedKeys: Number[]
+  treeData: MenuModel[],
+  isEditMenu:Boolean,
+  menuForm: {
+    type: Number
+    label?: String
+    auth?: String
+    path?: String
+    url: String
+  }
+  subLoding:Boolean
+}
+const state = reactive<menuTreeState>({
   treeSearchPattern: '',
+  treeItemTitle: '',
   loading: true,
-  expandedKeys: [''],
+  expandedKeys: [],
   treeData: [],
+  isEditMenu:false,
+  menuForm: {
+    type: 1,
+    label: '',
+    auth: '',
+    path: '',
+    url: '',
+  },
+  subLoding:false
 })
+const handleReset = ()=>{
+
+}
+const formSubmit = ()=>{
+
+}
 const addMenuOptions = ref([
   {
     label: '添加顶级菜单',

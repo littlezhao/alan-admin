@@ -35,6 +35,7 @@ const parseMenuToRouters = (menus: MenuModel[]): Array<RouteRecordRaw> => {
       menu.children = parseMenuToRouters(item.children)
     }
     menu.meta = { ...item }
+    menu.name = item.name
     menu.path = item.path
     const comps = Object.keys(views)
       .concat(Object.keys(layout))
