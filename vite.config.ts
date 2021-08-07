@@ -5,7 +5,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
-  plugins: [vue(), svgBuilder('./src/assets/svg/')],
+  plugins: [vue(), svgBuilder('./node_modules/@sicons/ionicons5/')],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

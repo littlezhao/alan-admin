@@ -35,15 +35,17 @@ const useAsyncRouteStore = defineStore({
       const menus = await getMenus<Array<MenuModel>>()
       const accessMenus = parseMenuToRouters(menus)
       this.setMenus(accessMenus)
-      console.log(router)
-      accessMenus.forEach((menu) => {
-        if (!router.hasRoute(menu.name as RouteRecordName)) {
-          router.addRoute(menu)
-          router.options.routes.push(menu)
-        }
-      })
+      this.addRoute(accessMenus)
       this.setDynamicAddedRoute(true)
     },
+    addRoute(routes:RouteRecordRaw[]) {
+      routes.forEach((route) => {
+        if (!router.hasRoute(route.name as RouteRecordName)) {
+          router.addRoute(route)
+          router.options.routes.push(route)
+        }
+      })
+    }
   },
 })
 // Need to be used outside the setup

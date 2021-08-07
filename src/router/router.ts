@@ -21,7 +21,7 @@ const rootRoute: RouteRecordRaw = {
   name:'Index',
   meta: {
     title: '控制台',
-    icon: 'dashbord',
+    icon: 'Apps',
   },
   component: () => import('../layout/index.vue'),
 }

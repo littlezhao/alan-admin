@@ -44,4 +44,16 @@ const parseMenuToRouters = (menus: MenuModel[]): Array<RouteRecordRaw> => {
     return menu
   })
 }
-export { parseMenu, parseMenuToRouters }
+let result = {} as MenuModel;
+const getSelectTreeItem = (menus: MenuModel[], key: number): MenuModel => {
+   menus.map(item => {
+    if (item.menuId == key) {
+      result = item;
+    }
+    if (item.children && item.children.length) {
+       getSelectTreeItem(item.children, key);
+    }
+   })
+  return result;
+}
+export { parseMenu, parseMenuToRouters,getSelectTreeItem }

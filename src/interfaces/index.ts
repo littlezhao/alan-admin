@@ -9,7 +9,7 @@
   url?: any
   sort: number
   icon: string
-  hidden: number
+  hidden: boolean
   permission: string
   createBy: string
   createTime: string
