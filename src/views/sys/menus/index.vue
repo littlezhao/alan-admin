@@ -87,7 +87,7 @@
             </n-icon>
             <span
               >编辑菜单{{
-                state.treeSelectItem ? `：${state.treeSelectItem.title}` : ''
+                state.treeSelectItem ? `：${state.treeSelectItem.label}` : ''
               }}</span
             >
           </n-space>
@@ -103,6 +103,18 @@
           v-if="state.isEditMenu"
           class="py-4"
         >
+          <n-form-item label="上级目录" path="parentId">
+            <n-tree-select
+              :options="menuTreeOptions"
+              v-model:value="state.menuForm.parentId"
+            />
+          </n-form-item>
+          <n-form-item label="类型" path="type">
+            <n-select
+              v-model:value="state.menuForm.type"
+              :options="typeOptions"
+            />
+          </n-form-item>
           <n-form-item label="名称" path="title">
             <n-input
               placeholder="请输入名称"
@@ -163,7 +175,7 @@
               <n-button
                 type="primary"
                 :loading="state.subLoding"
-                @click="formSubmit"
+                @click="editSubmit"
                 >保存修改</n-button
               >
               <n-button @click="handleReset">重置</n-button>
@@ -191,11 +203,43 @@ import { getMenusAndButtonsTree } from '@/apis/modules/menus'
 import type { MenuModel } from '@/interfaces'
 import { getSelectTreeItem } from '@/utils/menuUtils'
 import { NIcon } from 'naive-ui'
-import type { TreeOption } from 'naive-ui'
-
+import type { SelectOption, TreeOption } from 'naive-ui'
+interface menuTreeState {
+  treeSearchPattern: String
+  treeSelectItem: { label?: string; key?: number } & MenuModel
+  loading: boolean
+  expandedKeys: number[]
+  treeData: MenuModel[]
+  isEditMenu: boolean
+  drawerTitle: string
+  menuForm: {
+    type: number
+    parentId: number | null
+    menuId: number
+    title?: string
+    icon?: string
+    permission?: string
+    path?: string
+    url: string
+    component?: string
+    hidden?: boolean
+    sort: number
+  }
+  subLoding: boolean
+}
+const menuTreeOptions = ref([
+  {
+    label: '顶级目录',
+    key: 0,
+  },
+])
 onMounted(async () => {
   const treeList: MenuModel[] = await getMenusAndButtonsTree()
-  state.treeData = parse2Tree(treeList)
+  const parseData = parse2Tree(treeList)
+  state.treeData = parseData
+  parseData.forEach((menu: any) => {
+    menuTreeOptions.value.push(menu)
+  })
   state.loading = false
 })
 const isAddDisable = computed(() => {
@@ -220,7 +264,12 @@ const parse2Tree = (menus: MenuModel[]): any => {
     } else {
       delete menu.children
     }
-    return { ...menu, label: menu.title, key: menu.menuId }
+    return {
+      ...menu,
+      label: menu.title,
+      key: menu.menuId,
+      parentId: menu.parentId ? menu.parentId : 0,
+    }
   })
 }
 const expandCollapseHandle = () => {
@@ -228,30 +277,10 @@ const expandCollapseHandle = () => {
     ? []
     : state.treeData.map((item: any) => item.key)
 }
-interface menuTreeState {
-  treeSearchPattern: String
-  treeSelectItem: { label?: string; key?: number } & MenuModel
-  loading: boolean
-  expandedKeys: number[]
-  treeData: MenuModel[]
-  isEditMenu: boolean
-  drawerTitle: string
-  menuForm: {
-    type: number
-    title?: string
-    icon?: string
-    permission?: string
-    path?: string
-    url: string
-    component?: string
-    hidden?: boolean
-    sort: number
-  }
-  subLoding: boolean
-}
+
 const state = reactive<menuTreeState>({
   treeSearchPattern: '',
-  treeSelectItem: {} as MenuModel,
+  treeSelectItem: null as unknown as MenuModel,
   loading: true,
   expandedKeys: [],
   treeData: [],
@@ -259,6 +288,8 @@ const state = reactive<menuTreeState>({
   drawerTitle: '顶级菜单',
   menuForm: {
     type: 1,
+    parentId: 0,
+    menuId: 0,
     title: '',
     permission: '',
     icon: '',
@@ -285,7 +316,9 @@ const openDrawer = () => {
   const { openDrawer: open } = drawerRef.value
   open()
 }
-const formSubmit = () => {}
+const editSubmit = () => {
+  console.log(state.menuForm)
+}
 const addMenuOptions = ref([
   {
     label: '添加顶级菜单',
@@ -301,6 +334,20 @@ const addMenuOptions = ref([
     label: '添加按钮',
     key: 'button',
     disabled: isAddDisable,
+  },
+])
+const typeOptions = ref<Array<SelectOption>>([
+  {
+    label: '目录',
+    value: 0,
+  },
+  {
+    label: '菜单',
+    value: 1,
+  },
+  {
+    label: '按钮',
+    value: 2,
   },
 ])
 </script>

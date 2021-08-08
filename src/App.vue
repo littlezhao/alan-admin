@@ -28,6 +28,7 @@ export default defineComponent({
         itemIconColorHover: '#409EFF',
         itemTextColorActive: '#409EFF',
         itemIconColorActive: '#409EFF',
+        itemIconColorCollapsed: '#fff',
       },
       Input: {},
     }

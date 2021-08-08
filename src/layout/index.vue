@@ -25,7 +25,6 @@
         <n-layout-content class="p-4 w-full flex-1"
           ><router-view></router-view
         ></n-layout-content>
-        <n-layout-footer style="height: 32px" bordered>成府路</n-layout-footer>
       </div>
     </n-layout>
   </n-layout>
