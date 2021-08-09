@@ -127,19 +127,19 @@
               v-model:value="state.menuForm.url"
             />
           </n-form-item>
-          <n-form-item label="路径" path="path">
+          <n-form-item label="路径" path="path" v-show="isAddMenu">
             <n-input
               placeholder="请输入路径"
               v-model:value="state.menuForm.path"
             />
           </n-form-item>
-          <n-form-item label="组件" path="component">
+          <n-form-item label="组件" path="component" v-show="isAddMenu">
             <n-input
               placeholder="请输入组件"
               v-model:value="state.menuForm.component"
             />
           </n-form-item>
-          <n-form-item label="图标" path="icon">
+          <n-form-item label="图标" path="icon" v-show="isAddMenu">
             <template #label>
               <div class="flex justify-end items-center">
                 图标
@@ -164,13 +164,13 @@
               v-model:value="state.menuForm.permission"
             />
           </n-form-item>
-          <n-form-item label="是否隐藏" path="hidden">
+          <n-form-item label="是否隐藏" path="hidden" v-show="isAddMenu">
             <n-switch v-model:value="state.menuForm.hidden" />
           </n-form-item>
           <n-form-item label="排序" path="sort">
             <n-input-number v-model:value="state.menuForm.sort" />
           </n-form-item>
-          <n-form-item path="auth" style="margin-left: 100px">
+          <n-form-item style="margin-left: 100px">
             <n-space>
               <n-button
                 type="primary"
@@ -246,6 +246,9 @@ const isAddDisable = computed(() => {
   return (
     state.treeSelectItem.type == undefined || state.treeSelectItem.type == 2
   )
+})
+const isAddMenu = computed(() => {
+  return state.menuForm.type != 2
 })
 const drawerRef = ref()
 const onExpandedKeys = (keys: number[]) => {

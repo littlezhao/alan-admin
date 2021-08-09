@@ -8,7 +8,7 @@ import store from '..'
 
 export interface IMenuState {
   menus: RouteRecordRaw[]
-  routers: RouteRecordRaw[]
+  buttons: MenuModel[]
   isDynamicAddedRoute: boolean
 }
 
@@ -16,7 +16,7 @@ const useAsyncRouteStore = defineStore({
   id: 'routes',
   state: (): IMenuState => ({
     menus: [],
-    routers: [],
+    buttons: [],
     isDynamicAddedRoute: false,
   }),
   getters: {
@@ -32,20 +32,38 @@ const useAsyncRouteStore = defineStore({
       this.menus = menus
     },
     async generateAsyncRoutes() {
-      const menus = await getMenus<Array<MenuModel>>()
-      const accessMenus = parseMenuToRouters(menus)
-      this.setMenus(accessMenus)
+      const menusButtons = await getMenus<Array<MenuModel>>()
+      this.filterButtons(menusButtons)
+      this.filterMenu(menusButtons)
+      const accessMenus = parseMenuToRouters(menusButtons)
       this.addRoute(accessMenus)
+      this.setMenus(accessMenus)
       this.setDynamicAddedRoute(true)
     },
-    addRoute(routes:RouteRecordRaw[]) {
+    filterMenu(menusAndButtons: MenuModel[]) {
+      return menusAndButtons.filter((item) => {
+        if (item.children && item.children.length) {
+          item.children = this.filterMenu(item.children)
+        }
+        return item.type != 2
+      })
+    },
+    filterButtons(menusAndButtons: MenuModel[]) {
+      menusAndButtons.forEach((item) => {
+        if (item.children && item.children.length) {
+          this.filterButtons(item.children)
+        }
+        if (item.type == 2) this.buttons.push(item)
+      })
+    },
+    addRoute(routes: RouteRecordRaw[]) {
       routes.forEach((route) => {
         if (!router.hasRoute(route.name as RouteRecordName)) {
           router.addRoute(route)
           router.options.routes.push(route)
         }
       })
-    }
+    },
   },
 })
 // Need to be used outside the setup

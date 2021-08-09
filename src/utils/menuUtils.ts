@@ -39,21 +39,21 @@ const parseMenuToRouters = (menus: MenuModel[]): Array<RouteRecordRaw> => {
     menu.path = item.path
     const comps = Object.keys(views)
       .concat(Object.keys(layout))
-        .filter(key => key.includes(item.component))
-    menu.component = comps.length && views[comps[0]] || layout[comps[0]] 
+      .filter((key) => key.includes(item.component))
+    menu.component = (comps.length && views[comps[0]]) || layout[comps[0]]
     return menu
   })
 }
-let result = {} as MenuModel;
+let result = {} as MenuModel
 const getSelectTreeItem = (menus: MenuModel[], key: number): MenuModel => {
-   menus.map(item => {
+  menus.map((item) => {
     if (item.menuId == key) {
-      result = item;
+      result = item
     }
     if (item.children && item.children.length) {
-       getSelectTreeItem(item.children, key);
+      getSelectTreeItem(item.children, key)
     }
-   })
-  return result;
+  })
+  return result
 }
-export { parseMenu, parseMenuToRouters,getSelectTreeItem }
+export { parseMenu, parseMenuToRouters, getSelectTreeItem }
